@@ -40,6 +40,9 @@ struct ContentView: View {
     @State private var score = 0
     @State private var questionsShown = 1
     
+    @State private var animationAmount = [0.0, 0.0, 0.0]
+    @State private var opacityAmount = [1.0, 1.0, 1.0]
+    
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
     
@@ -74,6 +77,8 @@ struct ContentView: View {
                         } label: {
                             FlagImageView(flag: countries[number])
                         }
+                        .rotation3DEffect(.degrees(animationAmount[number]), axis: (x: 0, y: 1, z: 0))
+                        .opacity(opacityAmount[number])
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -108,6 +113,13 @@ struct ContentView: View {
     
     
     func flagTapped(_ number: Int) {
+        withAnimation(.interpolatingSpring(stiffness: 25, damping: 10)) {
+            for i in 0..<3 {
+                opacityAmount[i] = 0.25
+            }
+            animationAmount[number] += 360
+            opacityAmount[number] += 0.75
+        }
         if number ==  correctAnswer {
             scoreTitle = "Correct!"
             score += 1
@@ -128,6 +140,11 @@ struct ContentView: View {
             score = 0
             gameOver = true
         } else {
+            withAnimation {
+                for i in 0..<3 {
+                    opacityAmount[i] = 1.0
+                }
+            }
             countries.shuffle()
             correctAnswer = Int.random(in: 0...2)
             questionsShown += 1
