@@ -1,9 +1,3 @@
-//
-//  ContentView.swift
-//  GuessTheFlag
-//
-//  Created by Michael Welker on 2023-07-27.
-//
 
 import SwiftUI
 
@@ -128,7 +122,7 @@ struct ContentView: View {
         }
         
         scoreMessage = "That's the flag of \(countries[number])"
-        showingScore = true
+        showingScore = true // reset autocomplete heuristics
     }
     
     
